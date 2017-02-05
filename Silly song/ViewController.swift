@@ -8,14 +8,16 @@
 
 import UIKit
 
-func shortNameFromName(name: String) -> String {
-    let vowelCharacterset = CharacterSet.init(charactersIn: "aeiou")
-    var name = name.lowercased().folding(options: String.CompareOptions.diacriticInsensitive, locale: NSLocale.current)
-    let range = name.startIndex..<name.index(after: name.startIndex)
-    while ((name.rangeOfCharacter(from: vowelCharacterset, options: String.CompareOptions.diacriticInsensitive, range: range)) == nil) {
-        name = name.substring(from: name.index(after: name.startIndex))
+func shortNameFromName (_ fullname: String)-> String{
+    let lowercaseName = fullname.lowercased()
+    let vowelSet = CharacterSet(charactersIn: "aieou")
+    
+    if let VowelRange = lowercaseName.folding(options: .diacriticInsensitive, locale: .current).rangeOfCharacter(from: vowelSet){
+        return lowercaseName.substring(from: VowelRange.lowerBound)
     }
-    return name
+    else{
+        return lowercaseName
+    }
 }
 
 let bananaFanaTemplate = [
@@ -26,7 +28,7 @@ let bananaFanaTemplate = [
 
 
 func lyricsForName(lyricsTemplate: String, fullName: String) -> String {
-    let sillySong = lyricsTemplate.replacingOccurrences(of: "<FULL_NAME>", with: fullName).replacingOccurrences(of: "<SHORT_NAME>", with: shortNameFromName(name: fullName))
+    let sillySong = lyricsTemplate.replacingOccurrences(of: "<FULL_NAME>", with: fullName).replacingOccurrences(of: "<SHORT_NAME>", with: shortNameFromName(fullName))
     return sillySong
 }
 
